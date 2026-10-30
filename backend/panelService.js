@@ -1,5 +1,6 @@
 const crypto = require("crypto");
 const { getPeakSunHours } = require("./powerClient");
+const { generatePanelSvg } = require("./imageGen");
 const PERFORMANCE_RATIO = 0.8;
 
 function estimateAnnualKwh(capacityKw, peakSunHoursPerDay) {
@@ -23,10 +24,19 @@ async function buildPanelMetadata({ panelId, model, capacity_kw, city, state, co
     query_date: queryDate,
     annual_kwh: annualKwh,
   });
+    const svg = generatePanelSvg({
+    panelId,
+    city,
+    capacity_kw: capacityNum,
+    estimated_kwh_year: annualKwh,
+  });
+
+  const image = `data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`;
 
   const metadata = {
     name: `Solar Panel #${panelId} - ${city}`,
     description: "Testnet Solar Panel NFT backed by open irradiance data.",
+        image,
     attributes: [
       { trait_type: "Model", value: model || "Generic-Panel" },
       { trait_type: "Capacity (kW)", value: capacityNum },
@@ -46,6 +56,7 @@ async function buildPanelMetadata({ panelId, model, capacity_kw, city, state, co
     peak_sun_hours_per_day: peakSunHours,
     estimated_generation_kwh_year: annualKwh,
     verification: { data_proof, query_date: queryDate },
+        svg,
     metadata,
   };
 }

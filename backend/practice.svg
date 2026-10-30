@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="150">
+  <rect width="300" height="150" fill="#0f172a" />
+  <circle cx="250" cy="50" r="25" fill="#facc15" />
+  <text x="110" y="60" fill="white" font-size="20">Solar Panel #2</text>
+</svg>
